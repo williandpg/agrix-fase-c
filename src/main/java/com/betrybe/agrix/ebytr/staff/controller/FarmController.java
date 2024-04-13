@@ -72,7 +72,7 @@ public class FarmController {
 
   @GetMapping("/{farmId}/crops")
   public List<CropDto> findCropByFarmId(@PathVariable("farmId")
-  Long farmId) throws FarmNotFoundException {
+      Long farmId) throws FarmNotFoundException {
     return cropService.findCropByFarmId(farmId)
         .stream().map(crop -> CropDto.fromEntity(crop, farmId)).toList();
   }
