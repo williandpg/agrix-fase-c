@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import java.util.Objects;
 
 /**
- * Class representing a person.
+ * Class representing a persona.
  */
 @Entity
 public class Person {
@@ -27,6 +27,19 @@ public class Person {
   private Role role;
 
   public Person() {
+  }
+
+  /**
+   * Person.
+   *
+   * @param id id
+   * @param username username
+   * @param role role
+   */
+  public Person(Long id, String username, String role) {
+    this.id = id;
+    this.username = username;
+    this.role = Role.valueOf(role);
   }
 
   public Long getId() {
