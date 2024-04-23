@@ -12,6 +12,8 @@ import com.betrybe.agrix.ebytr.staff.service.exception.FarmNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,7 +54,9 @@ public class FarmController {
 
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
-  public List<FarmDto> findAll() {
+  @PreAuthorize("hasAuthority('ROLE_USER')" + "or hasAuthority('ROLE_MANAGER')"
+      + "or hasAuthority('ROLE_ADMIN')")
+  public List<FarmDto> findAll(@AuthenticationPrincipal Farm farm) {
     List<Farm> listFarms = farmService.findAll();
     return listFarms.stream().map(FarmDto::fromEntity).toList();
   }
