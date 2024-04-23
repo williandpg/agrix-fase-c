@@ -25,8 +25,4 @@ public record PersonDto(Long id, String username, String role) {
     );
   }
 
-  public Person toEntity() {
-    return new Person(id, username, role);
-  }
-
 }

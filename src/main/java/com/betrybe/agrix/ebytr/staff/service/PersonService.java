@@ -1,18 +1,21 @@
 package com.betrybe.agrix.ebytr.staff.service;
 
-import com.betrybe.agrix.ebytr.staff.controller.dto.PersonDto;
 import com.betrybe.agrix.ebytr.staff.entity.Person;
 import com.betrybe.agrix.ebytr.staff.exception.PersonNotFoundException;
 import com.betrybe.agrix.ebytr.staff.repository.PersonRepository;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
  * Service layer class for handling persons business logic .
  */
 @Service
-public class PersonService {
+public class PersonService implements UserDetailsService {
 
   private final PersonRepository personRepository;
 
@@ -51,9 +54,16 @@ public class PersonService {
   /**
    * Creates a new person.
    */
-  public PersonDto create(PersonDto personDto) {
-    Person person = personDto.toEntity();
-    personRepository.save(person);
-    return PersonDto.fromEntity(person);
+  public Person create(Person person) {
+    String cryptPassword =
+        new BCryptPasswordEncoder().encode(person.getPassword());
+    person.setPassword(cryptPassword);
+    return personRepository.save(person);
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    return personRepository.findByUsername(username)
+        .orElseThrow(() -> new UsernameNotFoundException(username));
   }
 }
