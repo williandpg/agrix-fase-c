@@ -51,7 +51,8 @@ public class FertilizerController {
    */
   @GetMapping()
   @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-  public ResponseEntity<List<FertilizerDto>> getAll(@AuthenticationPrincipal Fertilizer fertilizer) {
+  public ResponseEntity<List<FertilizerDto>> getAll(
+      @AuthenticationPrincipal Fertilizer fertilizer) {
     List<Fertilizer> fertilizers = fertilizerService.getAll();
     List<FertilizerDto> listFertilizer = fertilizers.stream()
         .map(FertilizerDto::fromEntity).toList();
